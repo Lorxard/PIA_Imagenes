@@ -1,0 +1,48 @@
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\1er Avance PI.exe.config
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\1er Avance PI.exe
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\1er Avance PI.pdb
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.csproj.AssemblyReference.cache
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\_1er_Avance_PI.Form2.resources
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\_1er_Avance_PI.Properties.Resources.resources
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.csproj.GenerateResource.cache
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.csproj.CoreCompileInputs.cache
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.exe
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.pdb
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AForge.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AForge.Video.DirectShow.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AForge.Video.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AForge.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AForge.Video.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AForge.Video.DirectShow.xml
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.csproj.CopyComplete
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\haarcascade_frontalface_alt_tree.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Emgu.CV.UI.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Emgu.CV.UI.GL.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Emgu.CV.World.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\OpenTK.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\OpenTK.GLControl.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\ZedGraph.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Emgu.CV.UI.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Emgu.CV.UI.GL.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Emgu.CV.World.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\OpenTK.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\OpenTK.GLControl.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\ZedGraph.xml
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\de\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\es\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\fr\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\hu\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\it\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\ja\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\pt\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\ru\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\sk\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\sv\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\tr\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\zh-cn\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\zh-tw\ZedGraph.resources.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\Interop.WMPLib.dll
+C:\Users\Luis\source\repos\1er Avance PI\bin\x64\Debug\AxInterop.WMPLib.dll
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\Interop.WMPLib.dll
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\AxInterop.WMPLib.dll
+C:\Users\Luis\source\repos\1er Avance PI\obj\x64\Debug\1er Avance PI.csproj.ResolveComReference.cache
