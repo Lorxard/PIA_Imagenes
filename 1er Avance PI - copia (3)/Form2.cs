@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AForge.Video.DirectShow;
 using AForge.Video;
+using AForge.Vision.Motion;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing.Imaging;
@@ -21,10 +22,12 @@ namespace _1er_Avance_PI
         static readonly CascadeClassifier cascadeClassifier = new CascadeClassifier("haarcascade_frontalface_alt_tree.xml");
 
         private Bitmap original;
-        private int caras =0;
+        private int caras = 0;
 
-        
-        private bool CamActiva= false;
+
+        private bool CamActiva = false;
+        private bool ImgActiva = false;
+        private bool VidActiva = false;
         private Bitmap resultante;
         private int[] histograma = new int[256];
         private int[,] conv3x3 = new int[3, 3];
@@ -32,15 +35,20 @@ namespace _1er_Avance_PI
         private int[] histograma2;
         private int mayor;
 
-        int filtro=0;
+        int filtro = 0;
 
         private Color[] colorCamCapture = new Color[10];
 
         private bool aplicado = false;
 
         bool isPause = false;
+        double countFrame = 0;
 
-        double TotalFrame;
+        double TotalFrames;
+        double CurrentFrameNo;
+        Mat CurrentFrame;
+        bool IsPlaying = false;
+        int FPS;
         double Fps;
         int FrameNo;
 
@@ -52,6 +60,12 @@ namespace _1er_Avance_PI
 
         VideoCapture videoCapture;
         private string ruta = "";
+
+        //Variables para deteccion
+        MotionDetector Detector;
+        float NvlDetect;
+
+        int hacer = 0;
 
         //private int factor;
         //private int offset;
@@ -88,6 +102,10 @@ namespace _1er_Avance_PI
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            Detector = new MotionDetector(new TwoFramesDifferenceDetector(),new MotionBorderHighlighting());
+            NvlDetect = 0;
+
+
             CargaDispositivos();
         }
 
@@ -129,24 +147,7 @@ namespace _1er_Avance_PI
                 imgOriginal.Image = new Bitmap(getImage.FileName);
                 imgResult.Image = new Bitmap(getImage.FileName);
                 Bitmap copyBitmap = (Bitmap)imgOriginal.Image;
-               // Test(copyBitmap,1);
-
-
-
-
-
-                //imgOriginal.ImageLocation = getImage.FileName;
-                //imgResult.ImageLocation = getImage.FileName;
-
-                //imgOriginal.Image = new Bitmap(imgOriginal.ClientSize.Width, imgOriginal.ClientSize.Height);
-                //imgResult.Image = new Bitmap(imgResult.ClientSize.Width, imgResult.ClientSize.Height);
-
-                //original = (Bitmap)imgOriginal.Image;
-                //resultante = (Bitmap)imgResult.Image;
-                //Grises(resultante);
-
-
-                // txtRutaImagen.Text = getImage.FileName;
+                ImgActiva = true;
             }
             else
             {
@@ -168,94 +169,87 @@ namespace _1er_Avance_PI
             }
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            if (CamActiva)
-            {
-                CerrarWebCam();
-                CamActiva = false;
-            }
+        //private void button1_Click_1(object sender, EventArgs e)
+        //{
+        //    if (CamActiva)
+        //    {
+        //        CerrarWebCam();
+        //        CamActiva = false;
+        //    }
 
 
-            //int i = comboBox1.SelectedIndex;
-            //string NombreVideo = MiDispositivos[i].MonikerString;
-            try
-            {
-                int i = comboBox1.SelectedIndex;
-                string NombreVideo = MiDispositivos[i].MonikerString;
-                MiWebCam = new VideoCaptureDevice(NombreVideo);
-                MiWebCam.NewFrame += new NewFrameEventHandler(Capturando);
-                MiWebCam.Start();
-                CamActiva = true;
-            }
-            catch
-            {
-                MessageBox.Show("No se selecciono camara", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            //MiWebCam = new VideoCaptureDevice(NombreVideo);
-            //MiWebCam.NewFrame += new NewFrameEventHandler(Capturando);
-            //MiWebCam.Start();
-            //CamActiva = true;
+        //    //int i = comboBox1.SelectedIndex;
+        //    //string NombreVideo = MiDispositivos[i].MonikerString;
+        //    try
+        //    {
+
+        //        int i = comboBox1.SelectedIndex;
+        //        string NombreVideo = MiDispositivos[i].MonikerString;
+        //        MiWebCam = new VideoCaptureDevice(NombreVideo);
+        //        MiWebCam.NewFrame += new NewFrameEventHandler(Capturando);
+               
+        //        MiWebCam.Start();
+        //        CamActiva = true;
+        //    }
+        //    catch
+        //    {
+        //        MessageBox.Show("No se selecciono camara", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        //    }
+        //    //MiWebCam = new VideoCaptureDevice(NombreVideo);
+        //    //MiWebCam.NewFrame += new NewFrameEventHandler(Capturando);
+        //    //MiWebCam.Start();
+        //    //CamActiva = true;
 
 
-        }
+        //}
 
         private void Capturando(object sender, NewFrameEventArgs eventArgs)
         {
             Bitmap Imagen = (Bitmap)eventArgs.Frame.Clone();
-
-            //int x, y = 0;
-
-            //Color rColor = new Color();
-            //Color oColor = new Color();
-
-            //float g = 0;
-
-            //for (x = 0; x < Imagen.Width; x++)
-            //{
-            //    for (y = 0; y < Imagen.Height; y++)
-            //    {
-            //        oColor = Imagen.GetPixel(x, y);
-
-            //        g = oColor.R * 0.267f + oColor.G * 0.678f + oColor.B * 0.0593f;
-            //        if (g > 255)
-            //            g = 255;
-
-            //        rColor = Color.FromArgb((int)g, (int)g, (int)g);
-            //        Imagen.SetPixel(x, y, rColor);
-            //    }
-
-            //}
-
-
-            Image<Rgb, byte> grayImage = new Image<Rgb, byte>(Imagen);
-            Rectangle[] rectangles = cascadeClassifier.DetectMultiScale(grayImage, 1.4, 0);
-            caras = 0;
-
-            foreach (Rectangle rectangulo in rectangles)
+            switch (hacer)
             {
-                
-                using (Graphics graphics = Graphics.FromImage(Imagen))
-                {
-                    using (Pen lapiz = new Pen(Color.Blue, 1))
+                case 0:
+                    break;
+
+                case 1:
+                    NvlDetect = Detector.ProcessFrame(Imagen);
+                    break;
+                case 2:
+                    Image<Rgb, byte> grayImage = new Image<Rgb, byte>(Imagen);
+                    Rectangle[] rectangles = cascadeClassifier.DetectMultiScale(grayImage, 1.2, 1);
+                    caras = 0;
+
+                    foreach (Rectangle rectangulo in rectangles)
                     {
-                        SolidBrush s = new SolidBrush(Color.Blue);
-                        graphics.DrawRectangle(lapiz, rectangulo);
-                        FontFamily ff = new FontFamily("Arial");
-                        System.Drawing.Font font = new System.Drawing.Font(ff, 50);
-                        graphics.DrawString("Caras:" + caras.ToString(), font, s, new PointF(20, 20));
+                        caras++;
+                        using (Graphics graphics = Graphics.FromImage(Imagen))
+                        {
+                            using (Pen lapiz = new Pen(Color.Blue, 1))
+                            {
+                                SolidBrush s = new SolidBrush(Color.Blue);
+                                graphics.DrawRectangle(lapiz, rectangulo);
+                                
+                            }
+                        }
+                        
 
                     }
-                }
-                caras++;
+                    if (InvokeRequired)
+                        Invoke(new Action(() => Contador.Text = caras.ToString()));
+
+                    break;
 
             }
-            //if (InvokeRequired)
-            //    Invoke(new Action(() => Contador.Text = Contador.ToString()));
 
 
-            imgOriginal.Image = Imagen;
-            imgResult.Image = Imagen;
+
+
+            if(CamActiva)
+            {
+                camaraBox1.Image = Imagen;
+                camaraBox1.Image = Imagen;
+            }
+           
 
         }
 
@@ -266,10 +260,14 @@ namespace _1er_Avance_PI
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Bitmap copyBitmap = new Bitmap (imgOriginal.Image);
-            Grises(copyBitmap);
-            imgResult.Image = copyBitmap;
-            aplicado = true;
+            if(ImgActiva)
+            {
+                Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
+                Grises(copyBitmap);
+                imgResult.Image = copyBitmap;
+                aplicado = true;
+            }
+           
             //histo(copyBitmap);
             //Test(copyBitmap,2);
 
@@ -277,18 +275,18 @@ namespace _1er_Avance_PI
 
         public void Grises(Bitmap bmp)
         {
-            int x,y = 0;
+            int x, y = 0;
 
             Color rColor = new Color();
             Color oColor = new Color();
 
             float g = 0;
 
-            for (x=0; x<bmp.Width;x++)
+            for (x = 0; x < bmp.Width; x++)
             {
-                for (y=0; y < bmp.Height; y++)
+                for (y = 0; y < bmp.Height; y++)
                 {
-                    oColor = bmp.GetPixel(x,y);
+                    oColor = bmp.GetPixel(x, y);
 
                     g = oColor.R * 0.267f + oColor.G * 0.678f + oColor.B * 0.0593f;
                     if (g > 255)
@@ -503,11 +501,14 @@ namespace _1er_Avance_PI
 
         private void button4_Click(object sender, EventArgs e)
         {
-
-            Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
-            Negativo(copyBitmap);
-            imgResult.Image = copyBitmap;
-            aplicado = true;
+            if(ImgActiva)
+            {
+                Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
+                Negativo(copyBitmap);
+                imgResult.Image = copyBitmap;
+                aplicado = true;
+            }
+           
             //Test(copyBitmap, 2);
 
 
@@ -515,32 +516,41 @@ namespace _1er_Avance_PI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Bitmap copyBitmap = (Bitmap)imgOriginal.Image;
+            if (ImgActiva)
+            {
+                Bitmap copyBitmap = (Bitmap)imgOriginal.Image;
 
-            Ruido(copyBitmap);
-            imgResult.Image = copyBitmap;
-            aplicado = true;
-            //Test(copyBitmap,2);
+                Ruido(copyBitmap);
+                imgResult.Image = copyBitmap;
+                aplicado = true;
+                //Test(copyBitmap,2);
+            }
 
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
-            Sepia(copyBitmap);
-            imgResult.Image = copyBitmap;
-            aplicado = true;
-            //Test(copyBitmap,2);
+            if (ImgActiva)
+            {
+                Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
+                Sepia(copyBitmap);
+                imgResult.Image = copyBitmap;
+                aplicado = true;
+                //Test(copyBitmap,2);
+            }
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
-            Croma(copyBitmap);
-            imgResult.Image = copyBitmap;
+            if (ImgActiva)
+            {
+                Bitmap copyBitmap = new Bitmap(imgOriginal.Image);
+                Croma(copyBitmap);
+                imgResult.Image = copyBitmap;
 
-            aplicado = true;
-            //Test(copyBitmap, 2);
+                aplicado = true;
+                //Test(copyBitmap, 2);
+            }
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -553,7 +563,7 @@ namespace _1er_Avance_PI
 
         }
 
-        private void Test(Bitmap prueba,int op)
+        private void Test(Bitmap prueba, int op)
         {
             Bitmap bmp = prueba;
             int[] histogram_r = new int[256];
@@ -655,11 +665,11 @@ namespace _1er_Avance_PI
                     histograma[rColor.R]++;
                 }
             }
-            int n ;
+            int n;
 
             mayor = 0;
 
-            for (n =0; n < 256; n++)
+            for (n = 0; n < 256; n++)
             {
                 if (histograma[n] > mayor)
                     mayor = histograma[n];
@@ -672,7 +682,7 @@ namespace _1er_Avance_PI
 
         public void histo2()
         {
-           
+
             int n = 0;
 
             mayor = 0;
@@ -703,9 +713,9 @@ namespace _1er_Avance_PI
                 //g.DrawLine(plumaEjes, 19, 271, 277, 271);
                 //g.DrawLine(plumaEjes, 19, 270, 19, 14);
 
-                for(n = 0; n < 256; n++)
+                for (n = 0; n < 256; n++)
                 {
-                    g.DrawLine(plumaH, n+20, 270, n+20, 270-histograma[n]);
+                    g.DrawLine(plumaH, n + 20, 270, n + 20, 270 - histograma[n]);
                 }
 
             }
@@ -716,7 +726,7 @@ namespace _1er_Avance_PI
 
         private void button7_Click(object sender, EventArgs e)
         {
-            if (imgOriginal.Image == null)
+            if (!ImgActiva)
             {
                 MessageBox.Show("No se encontro imagen", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
@@ -724,7 +734,7 @@ namespace _1er_Avance_PI
             {
 
 
-                CargarHistogramas(new Bitmap(imgOriginal.Image),1);
+                CargarHistogramas(new Bitmap(imgOriginal.Image), 1);
                 if (aplicado)
                     CargarHistogramas(new Bitmap(imgResult.Image), 0);
 
@@ -745,7 +755,7 @@ namespace _1er_Avance_PI
 
             Image<Gray, Byte> R;
             Image<Gray, Byte> G;
-            Image<Gray, Byte> B; 
+            Image<Gray, Byte> B;
 
             B = _InputImage[0];
             G = _InputImage[1];
@@ -822,12 +832,8 @@ namespace _1er_Avance_PI
         {
 
         }
-
-        private async void button9_Click(object sender, EventArgs e)
+        private async void PlayVideo()
         {
-            //axWindowsMediaPlayer1.URL = ruta;
-            //axWindowsMediaPlayer1.Ctlcontrols.play();
-
             if (videoCapture == null)
             {
                 return;
@@ -835,37 +841,133 @@ namespace _1er_Avance_PI
 
             try
             {
-                if (isPause)
-                    isPause = !isPause;
-
-                while (!isPause)
+                while (IsPlaying == true && CurrentFrameNo < TotalFrames)
                 {
-                    Mat m = new Mat();
-                    videoCapture.Read(m);
+                    videoCapture.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames, CurrentFrameNo);
+                    videoCapture.Read(CurrentFrame);
+                    Image<Bgr, byte> img = CurrentFrame.ToImage<Bgr, byte>();
 
-                    if(!m.IsEmpty)
+
+                    switch (filtro)
                     {
-                        videoBox.Image = m.Bitmap;
-                        double fps = videoCapture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps);
-                        await Task.Delay(1000/Convert.ToInt32(fps));
-                    }
-                    else
-                    {
-                        break;
+                        case 0:
+                            videoBox.Image = CurrentFrame.Bitmap;
+                            break;
+
+                        case 1:
+                            videoBox.Image = Invertido(img);
+                            //video2Box.Image = bitResult;
+                            break;
+
+                        case 2:
+                            videoBox.Image = EscalaGrises(img);
+                            break;
+
+                        case 3:
+                            videoBox.Image = Sepia(img);
+                            break;
+
+                        case 4:
+                            videoBox.Image = RuidoVid(img.Bitmap);
+                            break;
+
+                        case 5:
+                            videoBox.Image = CromaVid(img);
+                            break;
+
+                        case 6:
+                            videoBox.Image = Croma2(img.Bitmap);
+                            break;
+
+                        default:
+                            videoBox.Image = CurrentFrame.Bitmap;
+                            break;
+
                     }
 
+
+
+
+
+                    CurrentFrameNo += 1;
+                    await Task.Delay(1000 / Convert.ToInt32(FPS));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private async void button9_Click(object sender, EventArgs e)
+        {
+            if (!VidActiva)
+            {
+                MessageBox.Show("No se selecciono video", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+                if (IsPlaying == true)
+            {
+                return;
+            }
+            //axWindowsMediaPlayer1.URL = ruta;
+            //axWindowsMediaPlayer1.Ctlcontrols.play();
+            if (CurrentFrameNo >= TotalFrames)
+                CurrentFrameNo = 0;
+
+
+            if (videoCapture != null)
+            {
+                IsPlaying = true;
+                PlayVideo();
+            }
+
+            else
+            {
+                IsPlaying = false;
+            }
+
+
+
+
+
+            //    if (isPause)
+            //        isPause = !isPause;
+
+            //    while (!isPause && CurrentFrameNo<TotalFrames)
+            //    {
+            //        Mat m = new Mat();
+            //        videoCapture.Read(m);
+
+            //        if (!m.IsEmpty)
+            //        {
+            //            videoBox.Image = m.Bitmap;
+            //            double fps = videoCapture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps);
+            //            await Task.Delay(1000 / Convert.ToInt32(fps));
+            //        }
+            //        else
+            //        {
+            //            break;
+            //        }
+
+            //    }
 
         }
 
         private void button11_Click(object sender, EventArgs e)
         {
             //axWindowsMediaPlayer1.Ctlcontrols.stop();
+            if (!VidActiva)
+            {
+                MessageBox.Show("No se selecciono video", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            IsPlaying = false;
+            CurrentFrameNo = 0;
+
+            videoBox.Image = null;
+            videoBox.Invalidate();
         }
 
         private async void btnVCargar_Click(object sender, EventArgs e)
@@ -873,111 +975,19 @@ namespace _1er_Avance_PI
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                
                 videoCapture = new VideoCapture(openFileDialog.FileName);
-                ruta = openFileDialog.FileName;
-                labelRuta.Text = ruta;
+                TotalFrames = Convert.ToInt32(videoCapture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount));
+                FPS = Convert.ToInt32(videoCapture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps));
 
-                ImageAttributes imageAttributes = new ImageAttributes();
-                Mat mat = new Mat();
-                Bitmap originalImage = mat.Bitmap;
-                while (!isPause)
-                {
-                    Image<Bgr, byte> CurrentFrame;
-                    videoCapture.Read(mat);
-                    if (!mat.IsEmpty)
-                    {
-                        Bitmap bitResult = new Bitmap(mat.Bitmap);
-                        switch (filtro)
-                        {
-                            case 0:
-                                bitResult = mat.Bitmap;
-                                break;
-
-                            case 1:
-                                bitResult = EscalaGrises(mat.Bitmap);
-                                //video2Box.Image = bitResult;
-                                break;
-
-                            case 2:
-
-                                break;
-
-                            case 3:
-
-                                break;
-
-                            case 4:
-
-                                break;
-
-                            case 5:
-
-                                break;
-
-                            default:
-                                bitResult = mat.Bitmap;
-                                break;
-
-                        }
+                IsPlaying = true;
+                CurrentFrame = new Mat();
+                CurrentFrameNo = 0;
 
 
-                        videoBox.Image = bitResult;
-                        video2Box.Image = bitResult;
-                        if (videoCapture == null)
-                        {
-                            return;
-                        }
+                VidActiva = true;
 
-                        try
-                        {
-                            if (isPause)
-                                isPause = !isPause;
-
-                            while (!isPause)
-                            {
-                                Mat m = new Mat();
-                                videoCapture.Read(m);
-
-                                if (!m.IsEmpty)
-                                {
-                                    videoBox.Image = m.Bitmap;
-                                    double fps = videoCapture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps);
-                                    await Task.Delay(1000 / Convert.ToInt32(fps));
-                                }
-                                else
-                                {
-                                    break;
-                                }
-
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
-                        }
-
-
-                    }
-                }
-
-                
-                
-
-
-                
-
-
-
-                //while (!isPause)
-                //{
-                //    videoCapture.Read(mat);
-                //    if(!mat.IsEmpty)
-                //    {
-                //        //Bitmap Final;
-
-                //        videoBox.Image = mat.Bitmap;
-                //    }
-                //}
+                PlayVideo();
 
 
             }
@@ -985,33 +995,347 @@ namespace _1er_Avance_PI
 
         private void btnPausar_Click(object sender, EventArgs e)
         {
+            if (!VidActiva)
+            {
+                MessageBox.Show("No se selecciono video", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            
             //axWindowsMediaPlayer1.Ctlcontrols.pause();
-            if (!isPause)
-                isPause = !isPause;
+            //if (!isPause)
+            //    isPause = !isPause;
+
+            IsPlaying = false;
 
         }
 
-        private Bitmap EscalaGrises(Image bmp)
+        private Bitmap EscalaGrises(Image<Bgr, byte> bmp)
         {
+            Bitmap bmpOut = bmp.ToBitmap();
+            Bitmap newbitmap = new Bitmap(bmp.Width, bmp.Height);
+            ImageAttributes imageAttributes = new ImageAttributes();
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][] {
+                new float[]{0.33f, 0.33f, 0.33f, 0, 0},
+                new float[]{0.59f, 0.59f, 0.59f, 0, 0},
+                new float[]{0.11f, 0.11f, 0.11f, 0, 0},
+                new float[]{0, 0, 0, 1, 0},
+                new float[]{0, 0, 0, 0, 0}
+            });
+            imageAttributes.ClearColorMatrix();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            using (Graphics graphics = Graphics.FromImage(newbitmap))
+            {
+                graphics.DrawImage(bmpOut,
+                                  new Rectangle(0, 0, bmpOut.Width, bmpOut.Height),
+                                  0, 0,
+                                  bmpOut.Width,
+                                  bmpOut.Height,
+                                  GraphicsUnit.Pixel,
+                                  imageAttributes);
+                graphics.Dispose();
+            }
+
+
+
+
+            return newbitmap;
+        }
+        private Bitmap Invertido(Image<Bgr, byte> bmp)
+        {
+            Bitmap bmpOut = bmp.ToBitmap();
             Bitmap newbitmap = new Bitmap(bmp.Width, bmp.Height);
             ImageAttributes imageAttributes = new ImageAttributes();
             ColorMatrix colorMatrix = new ColorMatrix(new float[][] {
                 new float[]{-1, 0, 0, 0, 0},
                 new float[]{0, -1, 0, 0, 0},
                 new float[]{0, 0, -1, 0, 0},
-                new float[]{0, 0, 0, -1, 0},
+                new float[]{0, 0, 0, 1, 0},
                 new float[]{1, 1, 1, 0, 1}
             });
-            imageAttributes.SetColorMatrix(colorMatrix);
-            Graphics graphics = Graphics.FromImage(newbitmap);
-            graphics.DrawImage(bmp,
-                               new Rectangle(0, 0, bmp.Width, bmp.Height),
-                               0, 0,
-                               bmp.Width,
-                               bmp.Height,
-                               GraphicsUnit.Pixel,
-                               imageAttributes);
-            graphics.Dispose();
+            imageAttributes.ClearColorMatrix();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            using (Graphics graphics = Graphics.FromImage(newbitmap))
+            {
+                graphics.DrawImage(bmpOut,
+                                  new Rectangle(0, 0, bmpOut.Width, bmpOut.Height),
+                                  0, 0,
+                                  bmpOut.Width,
+                                  bmpOut.Height,
+                                  GraphicsUnit.Pixel,
+                                  imageAttributes);
+                graphics.Dispose();
+            }
+
+
+
+
+            return newbitmap;
+        }
+
+
+        private Bitmap Sepia(Image<Bgr, byte> bmp)
+        {
+            Bitmap bmpOut = bmp.ToBitmap();
+            Bitmap newbitmap = new Bitmap(bmp.Width, bmp.Height);
+            ImageAttributes imageAttributes = new ImageAttributes();
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][] {
+                new float[]{0.393f, 0.349f, 0.272f, 0, 0},
+                new float[]{0.769f, 0.686f, 0.534f, 0, 0},
+                new float[]{0.189f, 0.168f, 0.131f, 0, 0},
+                new float[]{0, 0, 0, 1, 0},
+                new float[]{0, 0, 0, 0, 0}
+            });
+            imageAttributes.ClearColorMatrix();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            using (Graphics graphics = Graphics.FromImage(newbitmap))
+            {
+                graphics.DrawImage(bmpOut,
+                                  new Rectangle(0, 0, bmpOut.Width, bmpOut.Height),
+                                  0, 0,
+                                  bmpOut.Width,
+                                  bmpOut.Height,
+                                  GraphicsUnit.Pixel,
+                                  imageAttributes);
+                graphics.Dispose();
+            }
+
+            return newbitmap;
+        }
+
+        private Bitmap RuidoVid(Bitmap img)
+        {
+
+            Bitmap bitmap = new Bitmap(img);
+
+            int porcentaje = 8;
+            int rangoMin = 200;
+            int rangoMax = 255;
+            Random rnd = new Random();
+            Color rcolor;
+            Color oColor;
+            unsafe
+            {
+                Rectangle rectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                BitmapData bitmapData = bitmap.LockBits(rectangle,
+                                                      ImageLockMode.ReadWrite,
+                                                      bitmap.PixelFormat);
+                int bytesPerPixel = Image.GetPixelFormatSize(bitmap.PixelFormat) /8;
+                int heightInPixels = bitmap.Height;
+                int widthInPixels = bitmap.Width * bytesPerPixel;
+                byte* firstPixel = (byte*)bitmapData.Scan0;
+                Parallel.For(0, heightInPixels, y =>
+                {
+                    byte* currentLine = firstPixel + (y * bitmapData.Stride);
+                    for (int x = 0; x < widthInPixels; x = x + bytesPerPixel)
+                    {
+                        int oldBlue = currentLine[x];
+                        int oldGreen = currentLine[x + 1];
+                        int oldRed = currentLine[x + 2];
+
+                        if(rnd.Next(1,200)<= porcentaje)
+                        {
+                            int newblue = (byte)(rnd.Next(rangoMin, rangoMax));
+                            int newgreen = (byte)(rnd.Next(rangoMin, rangoMax));
+                            int newRed = (byte)(rnd.Next(rangoMin, rangoMax));
+                            currentLine[x] = (byte)newblue;
+                            currentLine[x + 1] = (byte)newgreen;
+                            currentLine[x + 2] = (byte)newRed;
+                        }
+                        else
+                        {
+                            currentLine[x] = (byte)oldBlue;
+                            currentLine[x + 1] = (byte)oldGreen;
+                            currentLine[x + 2] = (byte)oldRed;
+                        }
+
+
+                    }
+                });
+                bitmap.UnlockBits(bitmapData);
+            }
+
+            Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.DrawImage(bitmap,
+                               new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                               0,
+                               0,
+                               bitmap.Width,
+                               bitmap.Height,
+                               GraphicsUnit.Pixel);
+            return bitmap;
+        }
+
+        private Bitmap Croma2(Bitmap img)
+        {
+            Bitmap bitmap = new Bitmap(img);
+
+            int a = 4;
+
+            unsafe
+            {
+                Rectangle rectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                BitmapData bitmapData = bitmap.LockBits(rectangle,
+                                                      ImageLockMode.ReadWrite,
+                                                      bitmap.PixelFormat);
+                int bytesPerPixel = Image.GetPixelFormatSize(bitmap.PixelFormat) / 8;
+                int heightInPixels = bitmap.Height;
+                int widthInPixels = bitmap.Width * bytesPerPixel;
+                byte* firstPixel = (byte*)bitmapData.Scan0;
+                Parallel.For(0, heightInPixels, y =>
+                {
+                    byte* currentLine = firstPixel + (y * bitmapData.Stride);
+                    for (int x = 0; x < widthInPixels; x = x + bytesPerPixel)
+                    {
+                        int oldBlue = currentLine[x];
+                        int oldGreen = currentLine[x + 1];
+                        int oldRed = currentLine[x + 2];
+
+                        currentLine[x + 1] = (byte)oldGreen;
+
+                        if ((x + 2 +a < widthInPixels))
+                        {
+                            currentLine[x + 2] = (byte)(currentLine[x + 2 +(a)]);
+
+
+                            //int newblue = (byte)(rnd.Next(rangoMin, rangoMax));
+                            //int newgreen = (byte)(rnd.Next(rangoMin, rangoMax));
+                            //int newRed = (byte)(rnd.Next(rangoMin, rangoMax));
+                            //currentLine[x] = (byte)newblue;
+                            //currentLine[x + 1] = (byte)newgreen;
+                            //currentLine[x + 2] = (byte)newRed;
+                        }
+                        else
+                        {
+                            currentLine[x + 2] = 0;
+                            //currentLine[x] = (byte)oldBlue;
+                            //currentLine[x + 1] = (byte)oldGreen;
+                            //currentLine[x + 2] = (byte)oldRed;
+                        }
+
+                        if ((x + 2 -a) > 0)
+                        {
+                            currentLine[x] = (byte)(currentLine[x + 2 -a]);
+                        }
+                        else
+                        {
+                            currentLine[x] = 0;
+                        }
+
+
+                    }
+                });
+                bitmap.UnlockBits(bitmapData);
+            }
+
+            Graphics graphics = Graphics.FromImage(bitmap);
+            graphics.DrawImage(bitmap,
+                               new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                               0,
+                               0,
+                               bitmap.Width,
+                               bitmap.Height,
+                               GraphicsUnit.Pixel);
+            return bitmap;
+        }
+
+        private Bitmap CromaVid(Image<Bgr, byte> bmp)
+        {
+
+            //Bitmap bitmap = new Bitmap(img);
+
+            //int a = 4;
+
+            //unsafe
+            //{
+            //    Rectangle rectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+            //    BitmapData bitmapData = bitmap.LockBits(rectangle,
+            //                                          ImageLockMode.ReadWrite,
+            //                                          bitmap.PixelFormat);
+            //    int bytesPerPixel = Image.GetPixelFormatSize(bitmap.PixelFormat) / 8;
+            //    int heightInPixels = bitmap.Height;
+            //    int widthInPixels = bitmap.Width * bytesPerPixel;
+            //    byte* firstPixel = (byte*)bitmapData.Scan0;
+            //    Parallel.For(0, heightInPixels, y =>
+            //    {
+            //        byte* currentLine = firstPixel + (y * bitmapData.Stride);
+            //        for (int x = 0; x < widthInPixels; x = x + bytesPerPixel)
+            //        {
+            //            int oldBlue = currentLine[x];
+            //            int oldGreen = currentLine[x + 1];
+            //            int oldRed = currentLine[x + 2];
+
+            //            currentLine[x + 1] = (byte)oldGreen;
+
+            //            if ((x + 2 + (bytesPerPixel * a)) < widthInPixels)
+            //            {
+            //                currentLine[x +2] = (byte)(currentLine[x + 2 +(bytesPerPixel*a)]);
+
+
+            //                //int newblue = (byte)(rnd.Next(rangoMin, rangoMax));
+            //                //int newgreen = (byte)(rnd.Next(rangoMin, rangoMax));
+            //                //int newRed = (byte)(rnd.Next(rangoMin, rangoMax));
+            //                //currentLine[x] = (byte)newblue;
+            //                //currentLine[x + 1] = (byte)newgreen;
+            //                //currentLine[x + 2] = (byte)newRed;
+            //            }
+            //            else
+            //            {
+            //                currentLine[x + 2] = 0;
+            //                //currentLine[x] = (byte)oldBlue;
+            //                //currentLine[x + 1] = (byte)oldGreen;
+            //                //currentLine[x + 2] = (byte)oldRed;
+            //            }
+
+            //            if((x + 2 + (bytesPerPixel * a)) > 0)
+            //            {
+            //                currentLine[x]= (byte)(currentLine[x + 2 - (bytesPerPixel * a)]);
+            //            }
+            //            else
+            //            {
+            //                currentLine[x] = 0;
+            //            }
+
+
+            //        }
+            //    });
+            //    bitmap.UnlockBits(bitmapData);
+            //}
+
+            //Graphics graphics = Graphics.FromImage(bitmap);
+            //graphics.DrawImage(bitmap,
+            //                   new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+            //                   0,
+            //                   0,
+            //                   bitmap.Width,
+            //                   bitmap.Height,
+            //                   GraphicsUnit.Pixel);
+            //return bitmap;
+
+            Bitmap bmpOut = bmp.ToBitmap();
+            Bitmap newbitmap = new Bitmap(bmp.Width, bmp.Height);
+            ImageAttributes imageAttributes = new ImageAttributes();
+            ColorMatrix colorMatrix = new ColorMatrix(new float[][] {
+                new float[]{1.438f, -0.062f, -0.062f, 0, 0},
+                new float[]{-0.122f, 1.378f, -0.122f, 0,0},
+                new float[]{-0.016f, -0.016f, 1.483f, 0, 0},
+                new float[]{0, 0, 0, 1, 0},
+                new float[]{-0.03f, 0.05f, -0.02f, 0, 1}
+            });
+            imageAttributes.ClearColorMatrix();
+            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            using (Graphics graphics = Graphics.FromImage(newbitmap))
+            {
+                graphics.DrawImage(bmpOut,
+                                  new Rectangle(0, 0, bmpOut.Width, bmpOut.Height),
+                                  0, 0,
+                                  bmpOut.Width,
+                                  bmpOut.Height,
+                                  GraphicsUnit.Pixel,
+                                  imageAttributes);
+                graphics.Dispose();
+            }
+
+
 
 
             return newbitmap;
@@ -1039,10 +1363,152 @@ namespace _1er_Avance_PI
 
         private void button8_Click(object sender, EventArgs e)
         {
-            filtro =1;
+            if (!VidActiva)
+            {
+
+                return;
+            }
+            filtro =2;
         }
 
         private void video2Box_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (!VidActiva)
+            {
+
+                return;
+            }
+            filtro = 1;
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            filtro = 0;
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            if (!VidActiva)
+            {
+
+                return;
+            }
+            filtro = 3;
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            if (!VidActiva)
+            {
+
+                return;
+            }
+            filtro = 4;
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            if (!VidActiva)
+            {
+               
+                return;
+            }
+            filtro = 5;
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            if (!VidActiva)
+            {
+
+                return;
+            }
+            filtro = 6;
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            if (CamActiva)
+            {
+                CerrarWebCam();
+                CamActiva = false;
+            }
+
+
+            //int i = comboBox1.SelectedIndex;
+            //string NombreVideo = MiDispositivos[i].MonikerString;
+            try
+            {
+
+                int i = comboBox1.SelectedIndex;
+                string NombreVideo = MiDispositivos[i].MonikerString;
+                MiWebCam = new VideoCaptureDevice(NombreVideo);
+                
+                MiWebCam.NewFrame += new NewFrameEventHandler(Capturando);
+
+                MiWebCam.Start();
+                CamActiva = true;
+            }
+            catch
+            {
+                MessageBox.Show("No se selecciono camara", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            //MiWebCam = new VideoCaptureDevice(NombreVideo);
+            //MiWebCam.NewFrame += new NewFrameEventHandler(Capturando);
+            //MiWebCam.Start();
+            //CamActiva = true;
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+
+        { 
+            if(CamActiva)
+            {
+                hacer = 1;
+            }
+            else
+            {
+                MessageBox.Show("No se selecciono camara", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            if (CamActiva)
+            {
+                hacer = 2;
+            }
+            else
+            {
+                MessageBox.Show("No se selecciono camara", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            if (CamActiva)
+            {
+                hacer = 0;
+            }
+            else
+            {
+                MessageBox.Show("No se selecciono camara", "sin seleccion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            CerrarWebCam();
+            CamActiva = false;
+        }
+
+        private void Contador_Click_1(object sender, EventArgs e)
         {
 
         }
@@ -1053,6 +1519,8 @@ namespace _1er_Avance_PI
             {
                 MiWebCam.SignalToStop();
                 MiWebCam = null;
+                camaraBox1 = null;
+                CamActiva = false;
             }
         }
 

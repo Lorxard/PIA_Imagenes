@@ -40,18 +40,10 @@ namespace _1er_Avance_PI
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.imagenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cargarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.videoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.videoToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guardarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.numCaras = new System.Windows.Forms.Label();
-            this.Contador = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -68,15 +60,28 @@ namespace _1er_Avance_PI
             this.histogramBox2 = new Emgu.CV.UI.HistogramBox();
             this.histogramBox1 = new Emgu.CV.UI.HistogramBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.video2Box = new System.Windows.Forms.PictureBox();
             this.button8 = new System.Windows.Forms.Button();
             this.videoBox = new System.Windows.Forms.PictureBox();
-            this.labelRuta = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.button11 = new System.Windows.Forms.Button();
             this.btnPausar = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.btnVCargar = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
+            this.button16 = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.camaraBox1 = new System.Windows.Forms.PictureBox();
+            this.button17 = new System.Windows.Forms.Button();
+            this.button18 = new System.Windows.Forms.Button();
+            this.button19 = new System.Windows.Forms.Button();
+            this.button20 = new System.Windows.Forms.Button();
+            this.numCaras = new System.Windows.Forms.Label();
+            this.Contador = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imgResult)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgOriginal)).BeginInit();
             this.panel1.SuspendLayout();
@@ -84,8 +89,9 @@ namespace _1er_Avance_PI
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.video2Box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoBox)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.camaraBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -114,6 +120,7 @@ namespace _1er_Avance_PI
             // 
             // imgResult
             // 
+            this.imgResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.imgResult.Location = new System.Drawing.Point(497, 305);
             this.imgResult.Margin = new System.Windows.Forms.Padding(4);
             this.imgResult.Name = "imgResult";
@@ -126,6 +133,7 @@ namespace _1er_Avance_PI
             // 
             // imgOriginal
             // 
+            this.imgOriginal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.imgOriginal.Location = new System.Drawing.Point(12, 42);
             this.imgOriginal.Margin = new System.Windows.Forms.Padding(4);
             this.imgOriginal.Name = "imgOriginal";
@@ -169,7 +177,7 @@ namespace _1er_Avance_PI
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(204, 69);
             this.button2.TabIndex = 6;
-            this.button2.Text = "Sobel";
+            this.button2.Text = "Ruido";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -214,8 +222,6 @@ namespace _1er_Avance_PI
             this.menuStrip1.BackColor = System.Drawing.Color.CadetBlue;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.imagenToolStripMenuItem,
-            this.videoToolStripMenuItem,
             this.manualToolStripMenuItem,
             this.guardarToolStripMenuItem,
             this.salirToolStripMenuItem});
@@ -225,34 +231,6 @@ namespace _1er_Avance_PI
             this.menuStrip1.Size = new System.Drawing.Size(1753, 28);
             this.menuStrip1.TabIndex = 22;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // imagenToolStripMenuItem
-            // 
-            this.imagenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cargarToolStripMenuItem});
-            this.imagenToolStripMenuItem.Name = "imagenToolStripMenuItem";
-            this.imagenToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
-            this.imagenToolStripMenuItem.Text = "Imagen";
-            // 
-            // cargarToolStripMenuItem
-            // 
-            this.cargarToolStripMenuItem.Name = "cargarToolStripMenuItem";
-            this.cargarToolStripMenuItem.Size = new System.Drawing.Size(136, 26);
-            this.cargarToolStripMenuItem.Text = "Cargar";
-            // 
-            // videoToolStripMenuItem
-            // 
-            this.videoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.videoToolStripMenuItem1});
-            this.videoToolStripMenuItem.Name = "videoToolStripMenuItem";
-            this.videoToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
-            this.videoToolStripMenuItem.Text = "Video";
-            // 
-            // videoToolStripMenuItem1
-            // 
-            this.videoToolStripMenuItem1.Name = "videoToolStripMenuItem1";
-            this.videoToolStripMenuItem1.Size = new System.Drawing.Size(179, 26);
-            this.videoToolStripMenuItem1.Text = "Cargar Video";
             // 
             // manualToolStripMenuItem
             // 
@@ -283,49 +261,11 @@ namespace _1er_Avance_PI
             this.label1.TabIndex = 28;
             this.label1.Text = "Histograma con filtro";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(155, 5);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 33);
-            this.button1.TabIndex = 31;
-            this.button1.Text = "Camara";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(286, 11);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(227, 24);
-            this.comboBox1.TabIndex = 32;
-            // 
-            // numCaras
-            // 
-            this.numCaras.AutoSize = true;
-            this.numCaras.Location = new System.Drawing.Point(494, 284);
-            this.numCaras.Name = "numCaras";
-            this.numCaras.Size = new System.Drawing.Size(49, 17);
-            this.numCaras.TabIndex = 33;
-            this.numCaras.Text = "Caras:";
-            this.numCaras.Click += new System.EventHandler(this.label3_Click);
-            // 
-            // Contador
-            // 
-            this.Contador.AutoSize = true;
-            this.Contador.Location = new System.Drawing.Point(549, 284);
-            this.Contador.Name = "Contador";
-            this.Contador.Size = new System.Drawing.Size(46, 17);
-            this.Contador.TabIndex = 34;
-            this.Contador.Text = "label3";
-            this.Contador.Click += new System.EventHandler(this.Contador_Click);
-            // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(562, 20);
+            this.button7.Location = new System.Drawing.Point(166, 5);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(186, 33);
+            this.button7.Size = new System.Drawing.Size(179, 31);
             this.button7.TabIndex = 36;
             this.button7.Text = "Cargar Histograma";
             this.button7.UseVisualStyleBackColor = true;
@@ -392,6 +332,7 @@ namespace _1er_Avance_PI
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 31);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -418,17 +359,13 @@ namespace _1er_Avance_PI
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.button1);
-            this.tabPage1.Controls.Add(this.comboBox1);
-            this.tabPage1.Controls.Add(this.numCaras);
-            this.tabPage1.Controls.Add(this.Contador);
             this.tabPage1.Controls.Add(this.button7);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(1733, 832);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Imagenes";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // histogramBox6
@@ -487,11 +424,14 @@ namespace _1er_Avance_PI
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.video2Box);
+            this.tabPage2.Controls.Add(this.button16);
+            this.tabPage2.Controls.Add(this.button15);
+            this.tabPage2.Controls.Add(this.button14);
+            this.tabPage2.Controls.Add(this.button13);
+            this.tabPage2.Controls.Add(this.button12);
+            this.tabPage2.Controls.Add(this.button10);
             this.tabPage2.Controls.Add(this.button8);
             this.tabPage2.Controls.Add(this.videoBox);
-            this.tabPage2.Controls.Add(this.labelRuta);
-            this.tabPage2.Controls.Add(this.label9);
             this.tabPage2.Controls.Add(this.button11);
             this.tabPage2.Controls.Add(this.btnPausar);
             this.tabPage2.Controls.Add(this.button9);
@@ -501,25 +441,14 @@ namespace _1er_Avance_PI
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1733, 832);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Video";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // video2Box
-            // 
-            this.video2Box.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.video2Box.Location = new System.Drawing.Point(641, 81);
-            this.video2Box.Name = "video2Box";
-            this.video2Box.Size = new System.Drawing.Size(582, 282);
-            this.video2Box.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.video2Box.TabIndex = 9;
-            this.video2Box.TabStop = false;
-            this.video2Box.Click += new System.EventHandler(this.video2Box_Click);
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(1355, 102);
+            this.button8.Location = new System.Drawing.Point(1510, 391);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.Size = new System.Drawing.Size(99, 57);
             this.button8.TabIndex = 8;
             this.button8.Text = "Grises";
             this.button8.UseVisualStyleBackColor = true;
@@ -528,31 +457,13 @@ namespace _1er_Avance_PI
             // videoBox
             // 
             this.videoBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.videoBox.Location = new System.Drawing.Point(30, 81);
+            this.videoBox.Location = new System.Drawing.Point(57, 239);
             this.videoBox.Name = "videoBox";
-            this.videoBox.Size = new System.Drawing.Size(585, 282);
+            this.videoBox.Size = new System.Drawing.Size(1154, 435);
             this.videoBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.videoBox.TabIndex = 7;
             this.videoBox.TabStop = false;
             this.videoBox.Click += new System.EventHandler(this.pictureBox1_Click_1);
-            // 
-            // labelRuta
-            // 
-            this.labelRuta.AutoSize = true;
-            this.labelRuta.Location = new System.Drawing.Point(698, 30);
-            this.labelRuta.Name = "labelRuta";
-            this.labelRuta.Size = new System.Drawing.Size(54, 17);
-            this.labelRuta.TabIndex = 6;
-            this.labelRuta.Text = "label10";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(649, 30);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(42, 17);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "Ruta:";
             // 
             // button11
             // 
@@ -594,6 +505,171 @@ namespace _1er_Avance_PI
             this.btnVCargar.UseVisualStyleBackColor = true;
             this.btnVCargar.Click += new System.EventHandler(this.btnVCargar_Click);
             // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(1262, 274);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(97, 59);
+            this.button10.TabIndex = 10;
+            this.button10.Text = "Invertido";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(1389, 624);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(107, 50);
+            this.button12.TabIndex = 11;
+            this.button12.Text = "Restaurar";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(1510, 506);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(99, 57);
+            this.button13.TabIndex = 12;
+            this.button13.Text = "Sepia";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(1510, 274);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(99, 59);
+            this.button14.TabIndex = 13;
+            this.button14.Text = "Ruido";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button15
+            // 
+            this.button15.Location = new System.Drawing.Point(1262, 391);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(97, 57);
+            this.button15.TabIndex = 14;
+            this.button15.Text = "Aberración";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
+            // button16
+            // 
+            this.button16.Location = new System.Drawing.Point(1262, 506);
+            this.button16.Name = "button16";
+            this.button16.Size = new System.Drawing.Size(97, 57);
+            this.button16.TabIndex = 15;
+            this.button16.Text = "Polaroid";
+            this.button16.UseVisualStyleBackColor = true;
+            this.button16.Click += new System.EventHandler(this.button16_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.numCaras);
+            this.tabPage3.Controls.Add(this.Contador);
+            this.tabPage3.Controls.Add(this.button20);
+            this.tabPage3.Controls.Add(this.button19);
+            this.tabPage3.Controls.Add(this.button18);
+            this.tabPage3.Controls.Add(this.button17);
+            this.tabPage3.Controls.Add(this.camaraBox1);
+            this.tabPage3.Controls.Add(this.button1);
+            this.tabPage3.Controls.Add(this.comboBox1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1733, 832);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Camara";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(58, 28);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(125, 33);
+            this.button1.TabIndex = 33;
+            this.button1.Text = "Camara";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_2);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(189, 34);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(227, 24);
+            this.comboBox1.TabIndex = 34;
+            // 
+            // camaraBox1
+            // 
+            this.camaraBox1.Location = new System.Drawing.Point(259, 167);
+            this.camaraBox1.Name = "camaraBox1";
+            this.camaraBox1.Size = new System.Drawing.Size(1145, 585);
+            this.camaraBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.camaraBox1.TabIndex = 35;
+            this.camaraBox1.TabStop = false;
+            // 
+            // button17
+            // 
+            this.button17.Location = new System.Drawing.Point(20, 104);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(126, 50);
+            this.button17.TabIndex = 36;
+            this.button17.Text = "Deteccion facial";
+            this.button17.UseVisualStyleBackColor = true;
+            this.button17.Click += new System.EventHandler(this.button17_Click);
+            // 
+            // button18
+            // 
+            this.button18.Location = new System.Drawing.Point(20, 167);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(126, 56);
+            this.button18.TabIndex = 37;
+            this.button18.Text = "Detector de Movimiento";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
+            // button19
+            // 
+            this.button19.Location = new System.Drawing.Point(20, 229);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(126, 56);
+            this.button19.TabIndex = 38;
+            this.button19.Text = "Restaurar";
+            this.button19.UseVisualStyleBackColor = true;
+            this.button19.Click += new System.EventHandler(this.button19_Click);
+            // 
+            // button20
+            // 
+            this.button20.Location = new System.Drawing.Point(436, 27);
+            this.button20.Name = "button20";
+            this.button20.Size = new System.Drawing.Size(115, 34);
+            this.button20.TabIndex = 39;
+            this.button20.Text = "Apagar Camara";
+            this.button20.UseVisualStyleBackColor = true;
+            this.button20.Click += new System.EventHandler(this.button20_Click);
+            // 
+            // numCaras
+            // 
+            this.numCaras.AutoSize = true;
+            this.numCaras.Location = new System.Drawing.Point(256, 137);
+            this.numCaras.Name = "numCaras";
+            this.numCaras.Size = new System.Drawing.Size(49, 17);
+            this.numCaras.TabIndex = 40;
+            this.numCaras.Text = "Caras:";
+            // 
+            // Contador
+            // 
+            this.Contador.AutoSize = true;
+            this.Contador.Location = new System.Drawing.Point(311, 137);
+            this.Contador.Name = "Contador";
+            this.Contador.Size = new System.Drawing.Size(46, 17);
+            this.Contador.TabIndex = 41;
+            this.Contador.Text = "label3";
+            this.Contador.Click += new System.EventHandler(this.Contador_Click_1);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -618,9 +694,10 @@ namespace _1er_Avance_PI
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.video2Box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.videoBox)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.camaraBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -638,18 +715,10 @@ namespace _1er_Avance_PI
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem imagenToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem guardarToolStripMenuItem;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolStripMenuItem cargarToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem videoToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label numCaras;
-        private System.Windows.Forms.Label Contador;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -664,8 +733,6 @@ namespace _1er_Avance_PI
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button btnVCargar;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Label labelRuta;
-        private System.Windows.Forms.Label label9;
         private Emgu.CV.UI.HistogramBox histogramBox3;
         private Emgu.CV.UI.HistogramBox histogramBox2;
         private Emgu.CV.UI.HistogramBox histogramBox1;
@@ -674,7 +741,22 @@ namespace _1er_Avance_PI
         private Emgu.CV.UI.HistogramBox histogramBox4;
         private System.Windows.Forms.PictureBox videoBox;
         private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.PictureBox video2Box;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.PictureBox camaraBox1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.Button button17;
+        private System.Windows.Forms.Button button19;
+        private System.Windows.Forms.Button button20;
+        private System.Windows.Forms.Label numCaras;
+        private System.Windows.Forms.Label Contador;
         //private Emgu.CV.UI.HistogramBox histogramBox6;
         //private Emgu.CV.UI.HistogramBox histogramBox5;
         //private Emgu.CV.UI.HistogramBox histogramBox4;
